@@ -1,593 +1,227 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>(function(){var t=localStorage.getItem("df_theme")||"light";if(t!=="light")document.documentElement.setAttribute("data-theme",t);})()</script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Live TV – Dashflix</title>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/favicon/favicon/main/favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5412699736062085"
- crossorigin="anonymous"></script>
- <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=64b0f5079f35fb00121494d9&product=sticky-share-buttons" async></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stream Player</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 <style>
-/* ── DASHFLIX VARS (light default) ── */
-:root {
-  --bg:       #f0f0f0;
-  --surface:  #ffffff;
-  --surface2: #e8e8e8;
-  --surface3: #d4d4d4;
-  --surface4: #b8b8b8;
-  --accent:   #111111;
-  --accent-dim: rgba(0,0,0,0.07);
-  --text:     #0f0f0f;
-  --text-sub: #1a1a1a;
-  --text-muted: #555555;
-  --border:   rgba(0,0,0,0.10);
-  --border2:  rgba(0,0,0,0.24);
-  --r:        4px;
-  --nav-h:    56px;
-}
-[data-theme="dark"] {
-  --bg:#0a0a0a;--surface:#141414;--surface2:#1f1f1f;--surface3:#2a2a2a;--surface4:#363636;
-  --accent:#ffffff;--accent-dim:rgba(255,255,255,0.08);--text:#f5f5f5;--text-sub:#cccccc;
-  --text-muted:#8a8a8a;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.18);
-}
-[data-theme="matrix"] {
-  --bg:#000000;--surface:#001400;--surface2:#002000;--surface3:#002e00;--surface4:#004400;
-  --accent:#00ff41;--accent-dim:rgba(0,255,65,0.10);--text:#00ff41;--text-sub:#00cc33;
-  --text-muted:#007a18;--border:rgba(0,255,65,0.10);--border2:rgba(0,255,65,0.28);--r:2px;
-}
-[data-theme="neon"] {
-  --bg:#08000f;--surface:#100018;--surface2:#190028;--surface3:#240038;--surface4:#36004f;
-  --accent:#ff00ff;--accent-dim:rgba(255,0,255,0.10);--text:#ffaaff;--text-sub:#cc44ff;
-  --text-muted:#772299;--border:rgba(255,0,255,0.12);--border2:rgba(255,0,255,0.32);--r:6px;
-}
-[data-theme="futuristic"] {
-  --bg:#00040c;--surface:#000a18;--surface2:#001224;--surface3:#001c38;--surface4:#002850;
-  --accent:#00d4ff;--accent-dim:rgba(0,212,255,0.10);--text:#d0eeff;--text-sub:#6ec8f0;
-  --text-muted:#2e6888;--border:rgba(0,212,255,0.10);--border2:rgba(0,212,255,0.28);--r:2px;
-}
-[data-theme="cyberpunk"] {
-  --bg:#0d0000;--surface:#160000;--surface2:#220000;--surface3:#300005;--surface4:#44000a;
-  --accent:#ffe600;--accent-dim:rgba(255,230,0,0.10);--text:#ffe600;--text-sub:#ff6600;
-  --text-muted:#883300;--border:rgba(255,230,0,0.14);--border2:rgba(255,230,0,0.35);--r:2px;
-}
-[data-theme="synthwave"] {
-  --bg:#0e0018;--surface:#170025;--surface2:#220035;--surface3:#2e0048;--surface4:#420060;
-  --accent:#ff71ce;--accent-dim:rgba(255,113,206,0.10);--text:#ff71ce;--text-sub:#b967ff;
-  --text-muted:#6633aa;--border:rgba(255,113,206,0.14);--border2:rgba(255,113,206,0.35);
-}
-[data-theme="midnight"] {
-  --bg:#040818;--surface:#080f26;--surface2:#0d1836;--surface3:#142248;--surface4:#1e3060;
-  --accent:#6e8fff;--accent-dim:rgba(110,143,255,0.10);--text:#c8d8ff;--text-sub:#8aa0e0;
-  --text-muted:#3a508a;--border:rgba(110,143,255,0.12);--border2:rgba(110,143,255,0.28);--r:8px;
-}
-[data-theme="vhs"] {
-  --bg:#000811;--surface:#000f1e;--surface2:#00172d;--surface3:#002040;--surface4:#003055;
-  --accent:#00fff5;--accent-dim:rgba(0,255,245,0.10);--text:#00fff5;--text-sub:#ff00aa;
-  --text-muted:#005566;--border:rgba(0,255,245,0.14);--border2:rgba(0,255,245,0.35);
-}
-[data-theme="blood"] {
-  --bg:#050000;--surface:#0d0000;--surface2:#160000;--surface3:#220000;--surface4:#330000;
-  --accent:#cc0000;--accent-dim:rgba(204,0,0,0.12);--text:#ff4444;--text-sub:#cc2222;
-  --text-muted:#661111;--border:rgba(204,0,0,0.16);--border2:rgba(204,0,0,0.38);
-}
-[data-theme="terminal"] {
-  --bg:#0a0600;--surface:#130d00;--surface2:#1e1500;--surface3:#2a1e00;--surface4:#3d2c00;
-  --accent:#ffb000;--accent-dim:rgba(255,176,0,0.10);--text:#ffb000;--text-sub:#cc8800;
-  --text-muted:#664400;--border:rgba(255,176,0,0.14);--border2:rgba(255,176,0,0.32);--r:2px;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg); color: var(--text);
-  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; line-height: 1.5;
-  min-height: 100vh; overflow-x: hidden;
-}
-a { color: inherit; text-decoration: none; }
-button { cursor: pointer; font-family: inherit; background: none; border: none; padding: 0; }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface4); border-radius: 4px; }
-
-/* ── TOPBAR ── */
-.topbar {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 100;
-}
-.logo {
-  display: flex; align-items: center; gap: 6px;
-  text-decoration: none; flex-shrink: 0;
-}
-.logo-text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px; letter-spacing: 3px; color: var(--text); line-height: 1;
-}
-.logo-badge {
-  font-size: 9px; font-weight: 600; letter-spacing: 1px;
-  background: var(--surface3); color: var(--text-muted);
-  border: 1px solid var(--border); border-radius: 3px;
-  padding: 1px 5px; align-self: center;
-}
-
-.search-wrap { flex: 1; position: relative; max-width: 420px; margin: 0 auto; }
-.search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 12px; pointer-events: none; }
-.search-input {
-  width: 100%; background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--r); color: var(--text); padding: 8px 12px 8px 30px;
-  font-family: inherit; font-size: 13px; outline: none; transition: border-color 0.15s;
-}
-.search-input:focus { border-color: var(--border2); }
-.search-input::placeholder { color: var(--text-muted); }
-
-/* ── LAYOUT ── */
-.layout { display: flex; height: calc(100vh - 53px); }
-
-/* ── SIDEBAR ── */
-.sidebar {
-  width: 280px; min-width: 280px; background: var(--surface);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column; overflow: hidden; height: 100%;
-}
-.sidebar-header {
-  padding: 10px 12px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-}
-.sidebar-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 14px; letter-spacing: 1.5px; color: var(--text-sub);
-}
-.ch-count { font-size: 11px; color: var(--text-muted); }
-
-.filter-wrap { padding: 8px 10px; flex-shrink: 0; border-bottom: 1px solid var(--border); }
-.filter-select {
-  width: 100%; background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--r); color: var(--text); padding: 7px 28px 7px 10px;
-  font-family: inherit; font-size: 12px; outline: none; cursor: pointer;
-  -webkit-appearance: none; appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23737373'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 10px center;
-  transition: border-color 0.15s;
-}
-.filter-select:focus { border-color: var(--border2); }
-
-.channel-list { overflow-y: auto; flex: 1; }
-
-.ch-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px; cursor: pointer;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.1s; position: relative;
-}
-.ch-item:hover { background: var(--surface2); }
-.ch-item.active { background: var(--surface2); }
-.ch-item.active::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: 2px; background: var(--accent);
-}
-.ch-logo {
-  width: 40px; height: 40px; border-radius: var(--r);
-  background: var(--surface3); flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700; color: var(--text-muted); overflow: hidden;
-  border: 1px solid var(--border);
-}
-.ch-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: var(--r); }
-.ch-info { flex: 1; min-width: 0; }
-.ch-name {
-  font-size: 13px; font-weight: 500; color: var(--text);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.ch-group { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-.live-chip {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
-  background: var(--surface3); border: 1px solid var(--border);
-  color: var(--text-muted); border-radius: 3px; padding: 1px 5px; flex-shrink: 0;
-}
-.ch-item.active .live-chip {
-  background: var(--accent-dim); border-color: var(--border2); color: var(--text-sub);
-}
-.no-results {
-  padding: 40px 20px; text-align: center;
-  color: var(--text-muted); font-size: 13px;
-}
-.no-results i { font-size: 28px; display: block; margin-bottom: 10px; color: var(--surface4); }
-
-/* ── MAIN ── */
-.main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100%; overflow: hidden; }
-
-/* ── PLAYER ── */
-.player-area { flex: 1; min-height: 0; background: #000; position: relative; }
-.player-wrap { position: relative; height: 100%; background: #000; }
-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
-
-/* controls */
-.ctrl-layer {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: linear-gradient(transparent, rgba(0,0,0,0.88));
-  padding: 36px 12px 10px; opacity: 0; transition: opacity 0.2s; pointer-events: none;
-}
-.player-wrap:hover .ctrl-layer,
-.player-wrap.paused .ctrl-layer,
-.player-wrap.show-ctrl .ctrl-layer { opacity: 1; pointer-events: all; }
-
-.prog-bar {
-  width: 100%; height: 3px; background: rgba(255,255,255,0.2);
-  border-radius: 2px; cursor: pointer; margin-bottom: 9px; position: relative;
-}
-.prog-bar:hover { height: 5px; }
-.prog-fill { height: 100%; background: #fff; border-radius: 2px; width: 0%; pointer-events: none; }
-.prog-thumb {
-  position: absolute; top: 50%; transform: translate(-50%,-50%);
-  width: 11px; height: 11px; background: #fff; border-radius: 50%;
-  left: 0%; opacity: 0; pointer-events: none;
-}
-.prog-bar:hover .prog-thumb { opacity: 1; }
-
-.ctrl-row { display: flex; align-items: center; gap: 5px; }
-.c-btn {
-  background: none; border: none; color: rgba(255,255,255,0.9);
-  padding: 5px 7px; border-radius: var(--r); font-size: 14px;
-  transition: background 0.1s, color 0.1s; flex-shrink: 0;
-}
-.c-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
-.vol-slider { width: 65px; height: 3px; accent-color: white; cursor: pointer; }
-.time-txt { color: rgba(255,255,255,0.75); font-size: 11px; margin: 0 3px; white-space: nowrap; }
-.ctrl-gap { flex: 1; }
-
-/* overlays */
-.vid-overlay {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.72); color: var(--text); gap: 12px;
-}
-.vid-overlay.hidden { display: none; }
-.spin-ring {
-  width: 38px; height: 38px;
-  border: 3px solid var(--surface4); border-top-color: var(--accent);
-  border-radius: 50%; animation: spin 0.75s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.ov-msg { font-size: 13px; color: var(--text-muted); text-align: center; padding: 0 16px; }
-.ov-retry {
-  background: var(--surface2); border: 1px solid var(--border2);
-  color: var(--text); padding: 7px 18px; border-radius: var(--r);
-  font-size: 12px; font-family: inherit; font-weight: 500;
-  transition: border-color 0.15s; cursor: pointer;
-}
-.ov-retry:hover { border-color: var(--accent); }
-
-
-/* ── INFO BAR ── */
-.info-bar {
-  padding: 10px 12px; border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.now-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 1px;
-  color: var(--text-muted); text-transform: uppercase;
-  display: flex; align-items: center; gap: 6px; margin-bottom: 3px;
-}
-.live-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: blink 1.5s infinite; }
-@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.25} }
-.now-title { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 0.5px; color: var(--text); }
-.now-group { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-
-/* ── BOTTOM NAV (mobile) ── */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h);
-  background: rgba(240,240,240,0.96); backdrop-filter: blur(16px);
-  border-top: 1px solid var(--border);
-  display: none; align-items: center; justify-content: center; z-index: 1000;
-}
-.nav-item {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 3px; padding: 6px 24px;
-  color: var(--text-muted); font-size: 9px; font-weight: 500;
-  transition: color 0.15s; letter-spacing: 0.3px; background: none;
-  border: none; font-family: inherit; cursor: pointer; text-decoration: none;
-}
-.nav-item i { font-size: 16px; }
-.nav-item.active, .nav-item:hover { color: var(--text); }
-[data-theme="dark"] .bottom-nav { background: rgba(10,10,10,0.96); }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 768px) {
-  .layout { flex-direction: column; height: auto; }
-  .main { order: -1; height: auto; flex: none; overflow: visible; }
-  .player-area { flex: none; height: auto; }
-  .player-wrap { height: auto; padding-bottom: 56.25%; }
-  .sidebar {
-    width: 100%; min-width: unset; height: auto; max-height: 55vh;
-    border-right: none; border-top: 1px solid var(--border);
+  :root {
+    --bg: #fafcfa;
+    --panel: #ffffff;
+    --panel-hover: #eef7ef;
+    --border: #dfe8e0;
+    --text: #1f2b22;
+    --text-dim: #7c8c7e;
+    --green: #2f9e52;
+    --green-soft: #e3f5e7;
   }
-  .search-wrap { max-width: none; }
-  .vol-wrap { display: none; }
-  .bottom-nav { display: flex; }
-  body { padding-bottom: var(--nav-h); }
-}
-@media (min-width: 769px) {
-  .topbar { padding: 10px 16px; }
-}
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text); margin: 0; height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex; overflow: hidden;
+  }
+
+  /* Sidebar */
+  #sidebar {
+    width: 220px; min-width: 220px; background: var(--panel);
+    border-right: 1px solid var(--border); display: flex; flex-direction: column;
+    transition: transform .2s ease;
+  }
+  #sidebar-header {
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600;
+    letter-spacing: .03em; color: var(--green);
+  }
+  #sidebar-header i { font-size: 13px; }
+  #close-sidebar { margin-left: auto; display: none; background: none; border: none; color: var(--text-dim); font-size: 16px; cursor: pointer; }
+
+  #search-wrap { position: relative; padding: 8px; border-bottom: 1px solid var(--border); }
+  #search-wrap i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: 12px; }
+  #search {
+    width: 100%; padding: 6px 10px 6px 28px; background: var(--bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none;
+  }
+  #search:focus { border-color: var(--green); }
+
+  #channels { list-style: none; margin: 0; padding: 4px; overflow-y: auto; flex: 1; }
+  #channels li {
+    display: flex; align-items: center; gap: 8px; padding: 7px 10px; cursor: pointer;
+    border-radius: 6px; font-size: 13px; color: var(--text); line-height: 1.2;
+  }
+  #channels li i.fa-play { font-size: 9px; color: var(--text-dim); width: 10px; text-align: center; }
+  #channels li i.fa-lock { font-size: 10px; color: var(--text-dim); margin-left: auto; }
+  #channels li:hover { background: var(--panel-hover); }
+  #channels li.active { background: var(--green-soft); color: var(--green); font-weight: 600; }
+  #channels li.active i.fa-play { color: var(--green); }
+  #channels li.hidden { display: none; }
+
+  /* Main */
+  #main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  #topbar {
+    display: none; align-items: center; gap: 10px; padding: 8px 12px;
+    border-bottom: 1px solid var(--border); background: var(--panel);
+  }
+  #menu-btn { background: none; border: none; color: var(--text); font-size: 18px; cursor: pointer; }
+  #topbar span { font-size: 13px; font-weight: 600; color: var(--green); }
+
+  #video-wrap { flex: 1; display: flex; align-items: center; justify-content: center; background: #000; min-height: 0; }
+  video { width: 100%; height: 100%; max-height: 100%; object-fit: contain; background: #000; }
+
+  #status {
+    display: flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 12px;
+    color: var(--text-dim); background: var(--panel); border-top: 1px solid var(--border);
+  }
+  #status i { color: var(--green); }
+  #status.error i { color: #c0392b; }
+  #status.error { color: #c0392b; }
+  #status i.fa-circle-notch { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.25); z-index: 5; }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    #sidebar {
+      position: fixed; z-index: 10; top: 0; bottom: 0; left: 0;
+      transform: translateX(-100%); width: 78vw; max-width: 300px;
+    }
+    #sidebar.open { transform: translateX(0); }
+    #close-sidebar { display: block; }
+    #topbar { display: flex; }
+    #overlay.show { display: block; }
+  }
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <a class="logo" href="#">
-    <span class="logo-text">Dashflix</span>
-    <span class="logo-badge">TV</span>
-  </a>
-  <div class="search-wrap">
-    <i class="fas fa-search"></i>
-    <input class="search-input" id="searchInput" type="text" placeholder="Search channels..." oninput="filterChannels(this.value)">
+<div id="overlay"></div>
+
+<div id="sidebar">
+  <div id="sidebar-header">
+    <i class="fa-solid fa-satellite-dish"></i>
+    <span>CHANNELS</span>
+    <button id="close-sidebar" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
   </div>
-</header>
-
-<div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <span class="sidebar-title">Live Channels</span>
-      <span class="ch-count" id="chCount"></span>
-    </div>
-    <div class="filter-wrap">
-      <select class="filter-select" id="groupSelect" onchange="setGroup(this.value)">
-        <option value="All">All Groups</option>
-      </select>
-    </div>
-    <div class="channel-list" id="channelList"></div>
-  </aside>
-
-  <main class="main">
-    <div class="player-area">
-      <div class="player-wrap" id="playerWrap">
-        <video id="video" playsinline></video>
-
-        <div class="vid-overlay hidden" id="loadOverlay">
-          <div class="spin-ring"></div>
-          <div class="ov-msg" id="loadMsg">Connecting...</div>
-        </div>
-
-        <div class="vid-overlay hidden" id="errOverlay">
-          <i class="fas fa-exclamation-circle" style="font-size:32px;color:var(--text-muted)"></i>
-          <div class="ov-msg" id="errMsg">Stream unavailable</div>
-          <button class="ov-retry" onclick="retryStream()"><i class="fas fa-redo"></i> Retry</button>
-        </div>
-
-        <div class="ctrl-layer" id="ctrlLayer">
-          <div class="prog-bar" id="progBar" onclick="seekTo(event)">
-            <div class="prog-fill" id="progFill"></div>
-            <div class="prog-thumb" id="progThumb"></div>
-          </div>
-          <div class="ctrl-row">
-            <button class="c-btn" onclick="togglePlay()" id="playBtn"><i class="fas fa-play" id="playIco"></i></button>
-            <div class="vol-wrap" style="display:flex;align-items:center;gap:4px;">
-              <button class="c-btn" onclick="toggleMute()"><i class="fas fa-volume-up" id="volIco"></i></button>
-              <input type="range" class="vol-slider" id="volSlider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)">
-            </div>
-            <span class="time-txt" id="timeTxt">LIVE</span>
-            <div class="ctrl-gap"></div>
-            <button class="c-btn" onclick="pipToggle()" title="Picture-in-Picture"><i class="fas fa-compress-alt"></i></button>
-            <button class="c-btn" onclick="toggleFullscreen()"><i class="fas fa-expand" id="fsIco"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-bar" id="infoBar" style="display:none">
-      <div class="now-label"><span class="live-dot"></span>Now Playing</div>
-      <div class="now-title" id="nowTitle">—</div>
-      <div class="now-group" id="nowGroup">—</div>
-    </div>
-    <div class="sharethis-inline-share-buttons"></div>
-  </main>
+  <div id="search-wrap">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input id="search" type="text" placeholder="Search channels...">
+  </div>
+  <ul id="channels"></ul>
 </div>
 
-<!-- MOBILE BOTTOM NAV -->
-<nav class="bottom-nav">
-  <a class="nav-item" href="index.html"><i class="fas fa-home"></i>Home</a>
-</nav>
+<div id="main">
+  <div id="topbar">
+    <button id="menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+    <span id="current-name">Select a channel</span>
+  </div>
+  <div id="video-wrap">
+    <video id="video" controls autoplay playsinline></video>
+  </div>
+  <div id="status"><i class="fa-solid fa-circle-info"></i><span>Select a channel to start</span></div>
+</div>
 
 <script>
-const CHANNELS = [{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/a2z/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"A2Z","logo":"https://i.imgur.com/3myn4zH.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/aliwtv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Aliw TV","logo":"https://static.wikia.nocookie.net/logopedia/images/a/a4/ALIW-Channel-23.png/"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/alltv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ALL TV","logo":"https://brandlogo.org/wp-content/uploads/2024/05/All-TV-Logo-300x300.png.webp"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/ancglobal/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ANC Global","logo":"https://static.wikia.nocookie.net/russel/images/4/4c/ANC_Logo_2015.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/ancph/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ANC PH","logo":"https://static.wikia.nocookie.net/russel/images/4/4c/ANC_Logo_2015.png"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/animax/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Animax","logo":"https://i.imgur.com/b5YKiRd.png"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/animexhidive/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Anime x Hidive","logo":"https://provider-static.plex.tv/6/epg/channels/logos/gracenote/666de197b5e5c34842b3a94ae5a12634.png"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/aniplus/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Aniplus","logo":"https://static.wikia.nocookie.net/animax/images/b/b8/Aniplus_Asia_Logo.png"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptv/arirang/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Arirang","logo":"https://i.imgur.com/2NYcYrg.png"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptv/asianfoodnetwork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Asian Food Network","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/hong-kong/asian-food-network-hk.png"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptv/bbclifestyle/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"BBC Lifestyle","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/poland/bbc-lifestyle-pl.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/beinsports1/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Bein Sports 1","logo":"https://poster.starhubgo.com/Linear_channels2/213_1920x1080_HTV.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/beinsports2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Bein Sports 2","logo":"https://poster.starhubgo.com/Linear_channels2/211_1920x1080_HTV.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/beinsports3/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Bein Sports 3","logo":"https://poster.starhubgo.com/Linear_channels2/214_1920x1080_HTV.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/billonaryonewschannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Billonaryo News Channel","logo":"https://static.wikia.nocookie.net/russel/images/a/a8/Bilyonaryo_News_Channel_Logo_2024.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/buko/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Buko","logo":"https://upload.wikimedia.org/wikipedia/en/c/c0/BuKo_Buhay_Komedya_Logo.jpg"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/cartoonnetwork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Cartoon Network","logo":"https://i.imgur.com/8mfFj4h.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/celestialmoviespinoy/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Celestial Movies Pinoy","logo":"https://i.imgur.com/EUlYIWv.png"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/cignaldreamworks/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Dreamworks","logo":"https://i.imgur.com/cgfKSDP.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/cinemaoneglobal/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Cinema One Global","logo":"https://poster.starhubgo.com/Linear_channels2/145_1920x1080_HTV.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/cinemaoneph/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Cinema One PH","logo":"https://i.imgur.com/hJ6MBiA.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/cinemax/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Cinemax","logo":"https://i.imgur.com/YomkvVa.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/cinemoglobal/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Cinemo Global","logo":"https://i.imgur.com/4xDiXMP.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/cinemoph/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Cinemo PH","logo":"https://i.imgur.com/4xDiXMP.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/cltv36/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"CLTV 36","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/cltv-ph.png?raw=true"},{"group":"NEWS","url":"https://box.djdoolky76.net/stream/udptv/cnn/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"CNN","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/cnn-us.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/daznlaliga/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"DAZN LA LIGA","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/spain/dazn-laliga-es.png?raw=true"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/dreamworkstagalized/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Dreamworks Tagalized","logo":"https://i.imgur.com/cgfKSDP.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/dzmmteleradyo/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"DZMM Teleradyo","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/dzmm-teleradyo-ph.png?raw=true"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/dzmmteleradyosd/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"DZMM Teleradyo SD","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/dzmm-teleradyo-ph.png?raw=true"},{"group":"NEWS","url":"https://box.djdoolky76.net/stream/udptv/dzrhtv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"DZRH TV","logo":"https://i.imgur.com/2nvjsfy.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/gma/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"GMA","logo":"https://i.imgur.com/Cu1tAY8.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/gmalifetv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"GMA Life TV","logo":"https://static.wikia.nocookie.net/logopedia/images/6/6d/GMA_Life_TV.png"},{"group":"NEWS","url":"https://box.djdoolky76.net/stream/udptv/gmanewstv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"GMA News TV","logo":"https://static.wikia.nocookie.net/russel/images/e/e3/GMA_News_TV_Logo_2019.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/gmapinoytv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"GMA Pinoy TV","logo":"https://upload.wikimedia.org/wikipedia/en/a/af/GMA_Pinoy_TV_logo.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/gtv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"GTV","logo":"https://i.imgur.com/geuq18u.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/hboboxing/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO Boxing","logo":"https://www.thefightcity.com/wp-content/uploads/2019/10/HBO-logo-image-1-300x192.jpg"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbocomedy/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO Comedy","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/hbo-comedy-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbofamily/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO Family","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/brazil/hbo-family-br.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbohd/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO HD","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/hbo-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbohits/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO Hits","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/hbo-hits-ph.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbosignature/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO Signature","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/hbo-signature-ph.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbowest/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO West","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/hbo-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbozone/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO Zone","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/hd/hbo-zone-hd-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/hbo2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"HBO2","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/hd/hbo-2-hd-us.png?raw=true"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptv/history/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"History","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/history-channel-us.png?raw=true"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/ibc13/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"IBC13","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/ibc-ph.png?raw=true"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/jeepneytv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Jeepney TV","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/jeepney-tv-ph.png?raw=true"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/kapamilyachannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Kapamilya Channel","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/kapamilya-channel-ph.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/kbsworld/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"KBS World","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/international/kbs-world-int.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/kix/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"KIX","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/kix-ph.png?raw=true"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/knowledgechannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Knowledge Channel","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/knowledge-channel-ph.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/lotusmacau/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Lotus Macau","logo":"https://i.imgur.com/W1u8QdQ.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/metrochannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Metro Channel","logo":"https://static.wikia.nocookie.net/russel/images/2/25/Metro_Channel_Logo_2018.png/revision/latest/scale-to-width-down/350?"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/metvtoons/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"METV Toons","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/me-tv-toons-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/mn/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"MN+","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/india/mn-plus-hd-in.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/mnx/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"MNX","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/india/mnx-in.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/moviesnow/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Movies Now","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/india/movies-now-hd-in.png"},{"group":"MUSIC","url":"https://box.djdoolky76.net/stream/udptv/myxglobal1/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Myx Global","logo":"https://i.imgur.com/CIPTNnT.png"},{"group":"MUSIC","url":"https://box.djdoolky76.net/stream/udptv/myxph/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"MYX PH","logo":"https://i.imgur.com/CIPTNnT.png"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptv/m6/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"M6","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/switzerland/m6-ch.png?raw=true"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptv/m64k/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"M6 4K","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/switzerland/m6-ch.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/nbatvphilippines/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NBA TV Philippines","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/nba-tv-philippines-ph.png?raw=true"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/net25/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NET25","logo":"https://static.wikia.nocookie.net/russel/images/9/9d/Net_25_Logo_2021.png/revision/latest/scale-to-width-down/1200?cb=20220810102057"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptv/nhkworldjapan/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NHK World Japan","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/international/nhk-world-hz-int.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/onenews/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"One News","logo":"https://i.imgur.com/flKo7E5.png"},{"group":"NEWS","url":"https://box.djdoolky76.net/stream/udptv/oneph/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"One PH","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/one-ph-ph.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/onesports1/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"One Sports","logo":"https://i.imgur.com/nFLt8cN.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/onesports/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"One Sports +","logo":"https://i.imgur.com/RrBWZ16.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/pbarush/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"PBA Rush","logo":"https://i.imgur.com/tvxCVRr.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/pbo/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"PBO","logo":"https://i.imgur.com/oOMAyoX.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/ptv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"PTV","logo":"https://i.imgur.com/plyCuAw.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/rptv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"RPTV","logo":"https://i.imgur.com/IDCHfXm.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/smni/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"SMNI","logo":"https://i.imgur.com/WL2ugeZ.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/solarflix/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"SOLARFLIX","logo":"https://cms.cignal.tv/Upload/Images/Solar%20Logo%20png.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/spotv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"SPO TV","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/spotv-ph.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/spo2tv2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"SPO2 TV 2","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/spotv2-ph.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/sportsnet360/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sportsnet 360","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/sportsnet-360-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/sportsneteast/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sportsnet East","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/sportsnet-east-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/sportsnetone/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sportsnet One","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/sportsnet-one-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/sportsnetontario/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sportsnet Ontario","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/sportsnet-ontario-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/sportsnetpacific/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sportsnet Pacific","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/sportsnet-pacific-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/sportsnetwest/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sportsnet West","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/sportsnet-west-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/sportsnetworld/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sportsnet World","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/sportsnet-world-ca.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/tapactionflix/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Tap Action Flix","logo":"https://i.imgur.com/PwM0arW.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/tapmovies/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Tap Movies","logo":"https://i.imgur.com/3RVA5mV.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/tfcasia/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TFC Asia","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/tfc-us.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/tfcglobal/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TFC Global","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/tfc-us.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/thrill/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Thrill","logo":"https://i.imgur.com/K134qCk.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/tmc/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TMC","logo":"https://i.imgur.com/2k0yRUd.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/truefmtv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"True FM TV","logo":"https://static.wikia.nocookie.net/logopedia/images/a/a0/TRUETV_Logo_2024.png/revision/latest/smart/width/250/height/250"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptv/tsn1/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TSN1","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/tsn-1-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tsn2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TSN2","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/tsn-2-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tsn3/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TSN3","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/tsn-3-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tsn4/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TSN4","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/tsn-4-ca.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tsn5/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TSN5","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/tsn-5-ca.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/tv5hd/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TV5 HD","logo":"https://i.imgur.com/jsCBRq0.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/tvn/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"tvN","logo":"https://i.imgur.com/Z0u5pse.png"},{"group":"LOCAL","url":"https://box.djdoolky76.net/stream/udptv/untv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"UNTV","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/untv-ph.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/vivacinema/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Viva Cinema","logo":"https://i.imgur.com/5jn4U88.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/warnertv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Warner TV","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/warner-tv-ph.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tntsports1/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TNT Sports 1","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-kingdom/tnt-sports-1-uk.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tntsports2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TNT Sports 2","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-kingdom/tnt-sports-2-uk.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tntsports3/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TNT Sports 3","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-kingdom/tnt-sports-3-uk.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/tntsports4/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TNT Sports 4","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-kingdom/tnt-sports-4-uk.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptv/uaapvarsitychannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"UAAP Varsity Channel","logo":"https://upload.wikimedia.org/wikipedia/en/6/6f/Uaapvarsitychannel.png"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/nickelodeon/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Nickelodeon","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nickelodeon-us.png?raw=true"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptv/nickjr/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Nick Jr","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nick-jr-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/axn/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"AXN","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/poland/axn-pl.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptv/rockaction/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Rock Action","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/philippines/rock-action-ph.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptv/rockentertainment/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Rock Entertainment","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/world-asia/rock-entertainment-asi.png?raw=true"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptv/starhubfifawcch1/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"STARHUB | FIFAWCCh1","logo":"https://poster.starhubgo.com/Linear_channels2/251_1920x1080_HTV.png"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptv/starhubfifawcch2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"STARHUB | FIFAWCCh2","logo":"https://poster.starhubgo.com/Linear_channels2/252_1920x1080_HTV.png"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptv/foxfifafhd/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"FOX | FIFA FHD","logo":"https://i.imgur.com/GBBCLJo.png"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptvus/fox4k/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"FOX 4K","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/fox-us.png?raw=true"},{"group":"NEWS","url":"https://box.djdoolky76.net/stream/udptvus/abcnewslive/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ABC News Live","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/abc-news-live-hz-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/abckgo/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ABC(KGO)","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/us-local/abc-7-kabc-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptvus/amc/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"AMC","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/spain/amc-es.png"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptvus/bbcearth/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"BBC Earth","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/canada/bbc-earth-ca.png"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptvus/bbcfood/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"BBC Food","logo":"https://github.com/tv-logo/tv-logos/blob/main/misc/vod/bbc-food-vod.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/beinsports/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Bein Sports","logo":"https://github.com/mytv-android/myTVlogo/blob/main/img/BEINSPORTSUSA.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/bigtennetwork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Big Ten Network","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/big-ten-network-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/billardtv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Billard TV","logo":"https://p-img.movetv.com/cms/images/be553f7355653b3bc0755048f20ec9f0b11d4c77.png/height=183"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/cbsnewyork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"CBS | NEW YORK","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/cbs-news-new-york-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/cbschicago/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"CBS | CHICAGO","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/cbs-news-chicago-us.png?raw=true"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptvus/discovery/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Discovery","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/discovery-channel-us.png?raw=true"},{"group":"KIDS","url":"https://box.djdoolky76.net/stream/udptvus/disneychannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Disney Channel","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/canada/disney-channel-ca.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/espn/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ESPN","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/espn-us.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/espn2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ESPN2","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/espn-2-us.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/espnnews/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ESPN NEWS","logo":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/ESPNews.svg/500px-ESPNews.svg.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/espnu/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"ESPNU","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/espn-u-us.png"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptvus/foodnetwork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Food Network","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/food-network-us.png?raw=true"},{"group":"NEWS","url":"https://box.djdoolky76.net/stream/udptvus/foxnews/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Fox News","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/fox-news-us.png?raw=true"},{"group":"NEWS","url":"https://box.djdoolky76.net/stream/udptvus/fox11/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"FOX11","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/us-local/fox-11-kttv-us.png?raw=true"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptvus/fs1/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"FS1","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/fox-sports-1-us.png"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptvus/fs2/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"FS2","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/fox-sports-2-us.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptvus/fx/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"FX","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/fx-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/kabc/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"KABC","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/us-local/abc-7-kabc-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/knbc/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"KNBC","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/us-local/nbc-4-knbc-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptvus/mgmdrivein/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"MGM+ Drive-In","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/mgm-plus-drive-in-us.png?raw=true"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptvus/nationalgeographic/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"National Geographic","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/national-geographic-us.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/nbcbayarea/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NBC | BAY AREA","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nbc-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/nbcboston/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NBC | BOSTON","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nbc-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/nbcseattle/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NBC | SEATTLE","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nbc-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/nbatv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NBA TV","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nba-tv-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/nbcgolf/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NBC Golf","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nbc-golf-us.png?raw=true"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptvus/syfy/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"SYFY","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/syfy-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/tnt/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TNT","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/tnt-us.png"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/tnteast/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TNT East","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/tnt-us.png"},{"group":"DOCUMENTARY","url":"https://box.djdoolky76.net/stream/udptvus/travelchannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Travel Channel","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/travel-channel-us.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/wabc/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"WABC","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/us-local/abc-7-kabc-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/msgsportszone/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"MSG Sportszone","logo":"https://www.amny.com/wp-content/uploads/2023/03/MSG-SportsZone-BLACK-REV.png"},{"group":"MOVIES","url":"https://box.djdoolky76.net/stream/udptvus/amcthrillers/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"AMC Thrillers","logo":"https://github.com/tv-logo/tv-logos/blob/main/misc/vod/amc-thrillers-vod.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/mlbnetwork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"MLB Network","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/mlb-network-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/nbatvnbalp/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NBA TV - NBALP","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nba-tv-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/trutv/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Tru TV","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/tru-tv-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/tennischannel/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Tennis Channel","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/tennis-channel-hz-us.png?raw=true"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptvus/telemundoboston/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TELEMUNDO | BOSTON","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/telemundo-us.png?raw=true"},{"group":"FIFA WORLD CUP","url":"https://box.djdoolky76.net/stream/udptvus/telemundobayarea/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TELEMUNDO | BAY AREA","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/telemundo-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/nflredzonenetwork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NFL Redzone Network","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nfl-red-zone-hz-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/nflnetwork/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"NFL Network","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nfl-network-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/tbseast/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"TBS East","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/tbs-us.png?raw=true"},{"group":"ENTERTAINMENT","url":"https://box.djdoolky76.net/stream/udptvus/trueeast/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"True East","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/tru-tv-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/sportsbayarea/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sports Bay Area","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/nbcsn-bay-area-hz-us.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/sportsboston/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sports Boston","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/nbcsn-boston-hz-us.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/sportscalifornia/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sports California","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/nbcsn-california-hz-us.png?raw=true"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/sportsphiladelphia/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Sports Philadelphia","logo":"https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-states/nbcsn-philadelphia-hz-us.png"},{"group":"SPORTS","url":"https://box.djdoolky76.net/stream/udptvus/spectrumsportsnet/master.m3u8?u=gratisph\u0026p=b7594b1f3fc4330368923027acec015c59213e4ab57d0b52232b5b0f207b8703","name":"Spectrum Sportsnet+","logo":"https://github.com/tv-logo/tv-logos/blob/main/countries/united-states/spectrum-sportsnet-us.png?raw=true"}];
-
-const PINNED = [
-  'STARHUB | FIFAWCCh1','STARHUB | FIFAWCCh2','FOX | FIFA FHD','FOX 4K',
-  'FS1','FS2','M6','M6 4K','TELEMUNDO | BOSTON','TELEMUNDO | BAY AREA',
-];
-let channels = [
-  ...PINNED.map(n => CHANNELS.find(c => c.name === n)).filter(Boolean),
-  ...CHANNELS.filter(c => !PINNED.includes(c.name)),
-];
-let filtered = [...channels];
-let currentChannel = null;
 let hls = null;
-let activeGroup = 'All';
-let ctrlTimer = null;
-let isMuted = false;
-let retryCount = 0;
-const MAX_RETRY = 3;
+let dash = null;
 
-const groups = ['All', ...Array.from(new Set(channels.map(c => c.group))).sort()];
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const statusEl = document.getElementById('status');
+const currentNameEl = document.getElementById('current-name');
 
-function init() {
-  const sel = document.getElementById('groupSelect');
-  groups.slice(1).forEach(g => {
-    const o = document.createElement('option');
-    o.value = g; o.textContent = g;
-    sel.appendChild(o);
-  });
-  renderChannels();
-  document.getElementById('chCount').textContent = channels.length + ' channels';
-  const def = channels.find(c => c.name === 'FS1');
-  if (def) {
-    currentChannel = def;
-    renderChannels();
-    loadStream(def.url);
-    document.getElementById('nowTitle').textContent = def.name;
-    document.getElementById('nowGroup').textContent = def.group;
-    document.getElementById('infoBar').style.display = 'block';
-  }
+function setStatus(icon, text, isError) {
+  statusEl.classList.toggle('error', !!isError);
+  statusEl.innerHTML = '<i class="fa-solid ' + icon + '"></i><span>' + text + '</span>';
 }
 
-function renderChannels() {
-  const list = document.getElementById('channelList');
-  if (!filtered.length) {
-    list.innerHTML = '<div class="no-results"><i class="fas fa-search"></i>No channels found</div>';
-    return;
-  }
-  list.innerHTML = '';
-  filtered.forEach(ch => {
-    const item = document.createElement('div');
-    item.className = 'ch-item' + (currentChannel === ch ? ' active' : '');
-    item.onclick = () => playChannel(ch, item);
-    const initial = ch.name.charAt(0).toUpperCase();
-    item.innerHTML =
-      '<div class="ch-logo">' +
-        (ch.logo ? '<img src="' + esc(ch.logo) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : initial) +
-      '</div>' +
-      '<div class="ch-info"><div class="ch-name">' + esc(ch.name) + '</div><div class="ch-group">' + esc(ch.group) + '</div></div>' +
-      '<span class="live-chip">LIVE</span>';
-    list.appendChild(item);
-  });
-}
+function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); }
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+document.getElementById('menu-btn').onclick = openSidebar;
+document.getElementById('close-sidebar').onclick = closeSidebar;
+overlay.onclick = closeSidebar;
 
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+function playChannel(ch, li) {
+  const url = ch.url;
+  document.querySelectorAll('#channels li').forEach(el => el.classList.remove('active'));
+  if (li) li.classList.add('active');
+  currentNameEl.textContent = ch.name;
+  closeSidebar();
 
-function setGroup(g) {
-  activeGroup = g;
-  applyFilter(document.getElementById('searchInput').value.trim().toLowerCase());
-}
-
-function filterChannels(q) { applyFilter(q.trim().toLowerCase()); }
-
-function applyFilter(q) {
-  filtered = channels.filter(ch => {
-    const gm = activeGroup === 'All' || ch.group === activeGroup;
-    const sm = !q || ch.name.toLowerCase().includes(q) || ch.group.toLowerCase().includes(q);
-    return gm && sm;
-  });
-  document.getElementById('chCount').textContent = filtered.length + ' channels';
-  renderChannels();
-}
-
-function playChannel(ch, itemEl) {
-  if (currentChannel === ch) return;
-  currentChannel = ch;
-  document.querySelectorAll('.ch-item').forEach(el => el.classList.remove('active'));
-  if (itemEl) itemEl.classList.add('active');
-  document.getElementById('nowTitle').textContent = ch.name;
-  document.getElementById('nowGroup').textContent = ch.group;
-  document.getElementById('infoBar').style.display = 'block';
-  retryCount = 0;
-  loadStream(ch.url);
-}
-
-function loadStream(url) {
   const video = document.getElementById('video');
-  showLoading('Connecting...');
-  hideError();
-  if (hls) { hls.destroy(); hls = null; }
+  setStatus('fa-circle-notch', 'Loading ' + ch.name + ' ...');
 
-  if (Hls.isSupported()) {
-    hls = new Hls({ enableWorker: true, lowLatencyMode: true, backBufferLength: 30 });
-    hls.on(Hls.Events.ERROR, (_, data) => {
-      if (data.fatal) {
-        if (retryCount < MAX_RETRY) {
-          retryCount++;
-          setTimeout(() => loadStream(url), 2000);
-          showLoading('Retrying… (' + retryCount + '/' + MAX_RETRY + ')');
-        } else { showError('Stream unavailable. Try another channel.'); }
-      }
+  if (hls) { hls.destroy(); hls = null; }
+  if (dash) { dash.destroy(); dash = null; }
+
+  const isDash = url.toLowerCase().includes('.mpd');
+
+  if (isDash) {
+    dash = dashjs.MediaPlayer().create();
+    dash.on(dashjs.MediaPlayer.events.ERROR, (e) => {
+      setStatus('fa-triangle-exclamation', 'Error: ' + JSON.stringify(e.error), true);
     });
-    hls.on(Hls.Events.MANIFEST_PARSED, () => { hideLoading(); video.play().catch(()=>{}); retryCount = 0; });
+
+    if (ch.clearkey) {
+      const [kid, key] = ch.clearkey.split(':');
+      dash.setProtectionData({
+        'org.w3.clearkey': { clearkeys: { [kid]: key } }
+      });
+    }
+
+    dash.initialize(video, url, true);
+  } else if (Hls.isSupported()) {
+    hls = new Hls();
     hls.loadSource(url);
     hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+    hls.on(Hls.Events.ERROR, (event, data) => {
+      setStatus('fa-triangle-exclamation', 'Error: ' + data.details, true);
+    });
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = url; video.load(); video.play().catch(()=>{}); hideLoading();
-  } else { showError('HLS not supported in this browser.'); }
+    video.src = url;
+    video.play();
+  } else {
+    setStatus('fa-triangle-exclamation', 'Neither HLS nor DASH supported in this browser', true);
+    return;
+  }
+  setStatus('fa-circle-play', 'Playing: ' + ch.name);
 }
 
-function retryStream() { if (!currentChannel) return; retryCount = 0; loadStream(currentChannel.url); }
-function showLoading(msg) { document.getElementById('loadOverlay').classList.remove('hidden'); document.getElementById('loadMsg').textContent = msg; }
-function hideLoading() { document.getElementById('loadOverlay').classList.add('hidden'); }
-function showError(msg) { hideLoading(); document.getElementById('errOverlay').classList.remove('hidden'); document.getElementById('errMsg').textContent = msg; }
-function hideError() { document.getElementById('errOverlay').classList.add('hidden'); }
+fetch('xchannels.json')
+  .then(r => r.json())
+  .then(channels => {
+    const list = document.getElementById('channels');
+    channels.forEach((ch, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<i class="fa-solid fa-play"></i><span>' + ch.name + '</span>' +
+        (ch.clearkey ? '<i class="fa-solid fa-lock" title="Encrypted"></i>' : '');
+      li.dataset.name = ch.name.toLowerCase();
+      li.onclick = () => playChannel(ch, li);
+      list.appendChild(li);
+      if (i === 0) playChannel(ch, li);
+    });
 
-const video = document.getElementById('video');
-const playerWrap = document.getElementById('playerWrap');
-
-video.addEventListener('play', () => { document.getElementById('playIco').className = 'fas fa-pause'; playerWrap.classList.remove('paused'); });
-video.addEventListener('pause', () => { document.getElementById('playIco').className = 'fas fa-play'; playerWrap.classList.add('paused'); });
-video.addEventListener('timeupdate', updateProgress);
-video.addEventListener('waiting', () => showLoading('Buffering…'));
-video.addEventListener('playing', hideLoading);
-video.addEventListener('canplay', hideLoading);
-
-playerWrap.addEventListener('mousemove', showCtrl);
-playerWrap.addEventListener('touchstart', touchCtrl, { passive: true });
-playerWrap.addEventListener('click', e => { if (e.target === video || e.target === playerWrap) togglePlay(); });
-
-function showCtrl() {
-  playerWrap.classList.add('show-ctrl');
-  clearTimeout(ctrlTimer);
-  ctrlTimer = setTimeout(() => playerWrap.classList.remove('show-ctrl'), 3000);
-}
-function touchCtrl() {
-  if (playerWrap.classList.contains('show-ctrl')) playerWrap.classList.remove('show-ctrl');
-  else showCtrl();
-}
-function togglePlay() { if (video.paused) video.play(); else video.pause(); }
-function toggleMute() {
-  isMuted = !isMuted; video.muted = isMuted;
-  document.getElementById('volIco').className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
-}
-function setVolume(val) { video.volume = parseFloat(val); isMuted = parseFloat(val) === 0; video.muted = isMuted; document.getElementById('volIco').className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'; }
-function updateProgress() {
-  if (!video.duration || !isFinite(video.duration)) { document.getElementById('timeTxt').textContent = 'LIVE'; document.getElementById('progFill').style.width = '100%'; document.getElementById('progThumb').style.left = '100%'; return; }
-  const pct = (video.currentTime / video.duration) * 100;
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progThumb').style.left = pct + '%';
-  const f = s => Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
-  document.getElementById('timeTxt').textContent = f(video.currentTime) + ' / ' + f(video.duration);
-}
-function seekTo(e) {
-  if (!video.duration || !isFinite(video.duration)) return;
-  const bar = document.getElementById('progBar');
-  video.currentTime = Math.max(0, Math.min(1, (e.clientX - bar.getBoundingClientRect().left) / bar.offsetWidth)) * video.duration;
-}
-function toggleFullscreen() {
-  const el = document.getElementById('playerWrap');
-  if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen).call(el);
-  else (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen).call(document);
-}
-document.addEventListener('fullscreenchange', () => {
-  document.getElementById('fsIco').className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
-});
-function pipToggle() {
-  if (document.pictureInPictureElement) document.exitPictureInPicture();
-  else if (video.requestPictureInPicture) video.requestPictureInPicture().catch(()=>{});
-}
-document.addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT') return;
-  if (e.key === ' ' || e.key === 'k') { e.preventDefault(); togglePlay(); }
-  if (e.key === 'm') toggleMute();
-  if (e.key === 'f') toggleFullscreen();
-  if (e.key === 'ArrowUp') { video.volume = Math.min(1, video.volume + 0.1); document.getElementById('volSlider').value = video.volume; }
-  if (e.key === 'ArrowDown') { video.volume = Math.max(0, video.volume - 0.1); document.getElementById('volSlider').value = video.volume; }
-});
-
-init();
+    document.getElementById('search').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      list.querySelectorAll('li').forEach(li => {
+        li.classList.toggle('hidden', !li.dataset.name.includes(q));
+      });
+    });
+  })
+  .catch(err => {
+    setStatus('fa-triangle-exclamation',
+      'Failed to load channels.json (' + err + '). Run this page from a local server, not by double-clicking the file.', true);
+  });
 </script>
+
 </body>
 </html>
