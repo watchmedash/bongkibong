@@ -38,7 +38,7 @@ const SERVERS = [
 function setPlayer() {
   const idx = parseInt(document.getElementById("srvSel").value);
   document.getElementById("vidPlayer").src = SERVERS[idx](showId, selSeason, selEpisode);
-  document.getElementById("dlBtn").href = `https://vidvault.ru/tv/${showId}/${selSeason}/${selEpisode}`;
+  document.getElementById("dlBtn").href = `https://vidvault.to/tv/${showId}/${selSeason}/${selEpisode}`;
 }
 function changeServer() { setPlayer(); }
 

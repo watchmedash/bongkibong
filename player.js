@@ -3,7 +3,7 @@ const movieId = params.get("id");
 
 if (!movieId || BLOCKED_MOVIES.has(parseInt(movieId))) location.replace("movies.html");
 
-document.getElementById("dlBtn").href = `https://vidvault.ru/movie/${movieId}`;
+document.getElementById("dlBtn").href = `https://vidvault.to/movie/${movieId}`;
 
 const SERVERS = [
   id => `https://vsembed.ru/embed/movie/${id}`,
