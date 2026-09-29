@@ -6,7 +6,7 @@ if (!showId || BLOCKED_SHOWS.has(parseInt(showId))) location.replace("shows.html
 let selSeason = 1, selEpisode = 1;
 
 const SERVERS = [
-  (id, s, e) => `https://vidrock.ru/tv/${id}/${s}/${e}`,
+  (id, s, e) => `https://vidrock.to/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidsrcme.ru/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
   (id, s, e) => `https://vidlink.pro/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://player.vidzee.wtf/embed/tv/${id}/${s}/${e}`,
