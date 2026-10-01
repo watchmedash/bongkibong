@@ -1,4 +1,4 @@
-const CACHE = "dashflix-v7";
+const CACHE = "dashflix-v8";
 const OFFLINE = "./offline.html";
 const STATIC_ASSETS = [
   "./offline.html",
