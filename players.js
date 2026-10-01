@@ -35,9 +35,15 @@ const SERVERS = [
   (id, s, e) => `https://vidzen.fun/tv/${id}/${s}/${e}`,
 ];
 
+const SANDBOXED = new Set([3, 7, 8]); // Server 4, Server 8, Server 9
+const SANDBOX = "allow-scripts allow-same-origin allow-forms allow-presentation";
+
 function setPlayer() {
   const idx = parseInt(document.getElementById("srvSel").value);
-  document.getElementById("vidPlayer").src = SERVERS[idx](showId, selSeason, selEpisode);
+  const frame = document.getElementById("vidPlayer");
+  if (SANDBOXED.has(idx)) frame.setAttribute("sandbox", SANDBOX);
+  else frame.removeAttribute("sandbox");
+  frame.src = SERVERS[idx](showId, selSeason, selEpisode);
   document.getElementById("dlBtn").href = `https://vidvault.to/tv/${showId}/${selSeason}/${selEpisode}`;
 }
 function changeServer() { setPlayer(); }

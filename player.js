@@ -39,9 +39,15 @@ const SERVERS = [
   id => `https://zxcstream.xyz/player/movie/${id}`,
 ];
 
+const SANDBOXED = new Set([1, 9]); // Server 2, Server 10
+const SANDBOX = "allow-scripts allow-same-origin allow-forms allow-presentation";
+
 function changeServer() {
   const idx = parseInt(document.getElementById("srvSel").value);
-  document.getElementById("vidPlayer").src = SERVERS[idx](movieId);
+  const frame = document.getElementById("vidPlayer");
+  if (SANDBOXED.has(idx)) frame.setAttribute("sandbox", SANDBOX);
+  else frame.removeAttribute("sandbox");
+  frame.src = SERVERS[idx](movieId);
 }
 changeServer();
 
