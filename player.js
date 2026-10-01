@@ -3,11 +3,12 @@ const movieId = params.get("id");
 
 if (!movieId || BLOCKED_MOVIES.has(parseInt(movieId))) location.replace("movies.html");
 
-document.getElementById("dlBtn").href = `https://vidvault.to/movie/${movieId}`;
+document.getElementById("dlBtn").href = `https://cinesrc.st/embed/movie/${movieId}`;
 
 const SERVERS = [
-  id => `https://vsembed.ru/embed/movie/${id}`,
   id => `https://moviesapi.to/movie/${id}`,
+  id => `https://vidrock.to/movie/${id}`,
+  id => `https://vsembed.ru/embed/movie/${id}`,
   id => `https://vidlink.pro/movie/${id}`,
   id => `https://vidfast.pro/movie/${id}?autoPlay=true`,
   id => `https://player.vidzee.wtf/embed/movie/${id}?server=1`,
@@ -15,7 +16,6 @@ const SERVERS = [
   id => `https://111movies.net/movie/${id}`,
   id => `https://www.2embed.cc/embed/${id}`,
   id => `https://cinemaos.tech/player/${id}`,
-  id => `https://cinesrc.st/embed/movie/${id}`,
   id => `https://player.cinezo.live/embed/movie/${id}`,
   id => `https://embed.icefy.top/movie?id=${id}`,
   id => `https://mapple.uk/watch/movie/${id}`,
@@ -39,7 +39,7 @@ const SERVERS = [
   id => `https://zxcstream.xyz/player/movie/${id}`,
 ];
 
-const SANDBOXED = new Set([1, 9]); // Server 2, Server 10
+const SANDBOXED = new Set([0]);
 const SANDBOX = "allow-scripts allow-same-origin allow-forms allow-presentation";
 
 function changeServer() {
