@@ -3,12 +3,12 @@ const movieId = params.get("id");
 
 if (!movieId || BLOCKED_MOVIES.has(parseInt(movieId))) location.replace("movies.html");
 
-document.getElementById("dlBtn").href = `https://cinesrc.st/embed/movie/${movieId}`;
+document.getElementById("dlBtn").href = `https://vidrock.to/movie/${movieId}`;
 
 const SERVERS = [
-  id => `https://moviesapi.to/movie/${id}`,
-  id => `https://vidrock.to/movie/${id}`,
   id => `https://vsembed.ru/embed/movie/${id}`,
+  id => `https://cinesrc.st/embed/movie/${id}`,
+  id => `https://moviesapi.to/movie/${id}`,
   id => `https://vidlink.pro/movie/${id}`,
   id => `https://vidfast.pro/movie/${id}?autoPlay=true`,
   id => `https://player.vidzee.wtf/embed/movie/${id}?server=1`,
@@ -39,7 +39,7 @@ const SERVERS = [
   id => `https://zxcstream.xyz/player/movie/${id}`,
 ];
 
-const SANDBOXED = new Set([0]);
+const SANDBOXED = new Set([]);
 const SANDBOX = "allow-scripts allow-same-origin allow-forms allow-presentation";
 
 function changeServer() {

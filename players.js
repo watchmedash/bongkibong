@@ -8,7 +8,7 @@ let selSeason = 1, selEpisode = 1;
 const SERVERS = [
   (id, s, e) => `https://cinesrc.st/embed/tv/${id}?s=${s}&e=${e}`,
   (id, s, e) => `https://player.cinezo.live/embed/tv/${id}/${s}/${e}`,
-  (id, s, e) => `https://vidrock.to/tv/${id}/${s}/${e}`,
+  (id, s, e) => `https://player.vidzee.wtf/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidsrcme.ru/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,
   (id, s, e) => `https://vidrock.to/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidlink.pro/tv/${id}/${s}/${e}`,
@@ -35,7 +35,7 @@ const SERVERS = [
   (id, s, e) => `https://vidzen.fun/tv/${id}/${s}/${e}`,
 ];
 
-const SANDBOXED = new Set([0, 1]);
+const SANDBOXED = new Set([]);
 const SANDBOX = "allow-scripts allow-same-origin allow-forms allow-presentation";
 
 function setPlayer() {
@@ -44,7 +44,7 @@ function setPlayer() {
   if (SANDBOXED.has(idx)) frame.setAttribute("sandbox", SANDBOX);
   else frame.removeAttribute("sandbox");
   frame.src = SERVERS[idx](showId, selSeason, selEpisode);
-  document.getElementById("dlBtn").href = `https://player.vidzee.wtf/embed/tv/${showId}/${selSeason}/${selEpisode}`;
+  document.getElementById("dlBtn").href = `https://vidrock.to/tv/${showId}/${selSeason}/${selEpisode}`;
 }
 function changeServer() { setPlayer(); }
 
