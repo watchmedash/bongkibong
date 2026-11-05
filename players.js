@@ -6,7 +6,6 @@ if (!showId || BLOCKED_SHOWS.has(parseInt(showId))) location.replace("shows.html
 let selSeason = 1, selEpisode = 1;
 
 const SERVERS = [
-  (id, s, e) => `https://cinesrc.st/embed/tv/${id}?s=${s}&e=${e}`,
   (id, s, e) => `https://player.cinezo.live/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://player.vidzee.wtf/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidsrcme.ru/embed/tv?tmdb=${id}&season=${s}&episode=${e}`,

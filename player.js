@@ -7,7 +7,6 @@ document.getElementById("dlBtn").href = `https://vidrock.to/movie/${movieId}`;
 
 const SERVERS = [
   id => `https://vidsrc.sh/embed/movie/${id}`,
-  id => `https://cinesrc.st/embed/movie/${id}`,
   id => `https://moviesapi.to/movie/${id}`,
   id => `https://vidlink.pro/movie/${id}`,
   id => `https://vidfast.pro/movie/${id}?autoPlay=true`,
