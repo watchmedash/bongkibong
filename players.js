@@ -35,7 +35,7 @@ const SERVERS = [
   (id, s, e) => `https://vidzen.fun/tv/${id}/${s}/${e}`,
 ];
 
-const SANDBOXED = new Set([16]);
+const SANDBOXED = new Set([]);
 const SANDBOX = "allow-scripts allow-same-origin allow-forms allow-presentation";
 
 function setPlayer() {
