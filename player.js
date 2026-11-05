@@ -6,7 +6,7 @@ if (!movieId || BLOCKED_MOVIES.has(parseInt(movieId))) location.replace("movies.
 document.getElementById("dlBtn").href = `https://vidrock.to/movie/${movieId}`;
 
 const SERVERS = [
-  id => `https://vsembed.ru/embed/movie/${id}`,
+  id => `https://vidsrc.sh/embed/movie/${id}`,
   id => `https://cinesrc.st/embed/movie/${id}`,
   id => `https://moviesapi.to/movie/${id}`,
   id => `https://vidlink.pro/movie/${id}`,

@@ -44,7 +44,7 @@ function setPlayer() {
   if (SANDBOXED.has(idx)) frame.setAttribute("sandbox", SANDBOX);
   else frame.removeAttribute("sandbox");
   frame.src = SERVERS[idx](showId, selSeason, selEpisode);
-  document.getElementById("dlBtn").href = `https://vidrock.to/tv/${showId}/${selSeason}/${selEpisode}`;
+  document.getElementById("dlBtn").href = `https://vidsrc.sh/tv/${showId}/${selSeason}/${selEpisode}`;
 }
 function changeServer() { setPlayer(); }
 
