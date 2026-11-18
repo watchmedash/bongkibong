@@ -3,25 +3,21 @@ const movieId = params.get("id");
 
 if (!movieId || BLOCKED_MOVIES.has(parseInt(movieId))) location.replace("movies.html");
 
-document.getElementById("dlBtn").href = `https://vidrock.to/movie/${movieId}`;
+document.getElementById("dlBtn").href = `https://02moviedownloader.top/api/download/movie/${movieId}`;
 
 const SERVERS = [
+  id => `https://vidsrc.su/movie/${id}`,
   id => `https://vidsrc.sh/embed/movie/${id}`,
   id => `https://vidspark.to/movie/${id}`,
-  id => `https://vidlink.pro/movie/${id}`,
-  id => `https://player.vidzee.wtf/embed/movie/${id}?server=1`,
   id => `https://vsembed.su/embed/movie/${id}`,
   id => `https://www.2embed.cc/embed/${id}`,
   id => `https://player.cinezo.live/embed/movie/${id}`,
-  id => `https://web.nxsha.app/embed/movie/${id}`,
-  id => `https://www.nontongo.win/embed/movie/${id}`,
   id => `https://multiembed.mov/?video_id=${id}&tmdb=1`,
   id => `https://vaplayer.ru/embed/movie/${id}`,
   id => `https://vidapi.xyz/embed/movie/${id}`,
   id => `https://vidcore.io/movie/${id}`,
   id => `https://vidnest.fun/movie/${id}`,
   id => `https://vidrock.to/movie/${id}`,
-  id => `https://vidsrc.su/movie/${id}`,
   id => `https://vidsrc.to/embed/movie/${id}`,
   id => `https://vidup.to/movie/${id}`,
   id => `https://vidzen.fun/movie/${id}`,

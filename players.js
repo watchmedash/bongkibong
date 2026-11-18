@@ -6,15 +6,12 @@ if (!showId || BLOCKED_SHOWS.has(parseInt(showId))) location.replace("shows.html
 let selSeason = 1, selEpisode = 1;
 
 const SERVERS = [
-  (id, s, e) => `https://player.cinezo.live/embed/tv/${id}/${s}/${e}`,
-  (id, s, e) => `https://player.vidzee.wtf/embed/tv/${id}/${s}/${e}`,
+  (id, s, e) => `https://vaplayer.ru/embed/tv/${id}/${s}/${e}`,
+  (id, s, e) => `https://vidsrc.sh/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidrock.to/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidlink.pro/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}`,
-  (id, s, e) => `https://web.nxsha.app/embed/tv/${id}/${s}/${e}`,
-  (id, s, e) => `https://www.nontongo.win/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}`,
-  (id, s, e) => `https://vaplayer.ru/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidapi.xyz/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidcore.net/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidflix.club/tv/${id}/${s}/${e}`,
@@ -22,6 +19,7 @@ const SERVERS = [
   (id, s, e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidup.to/tv/${id}/${s}/${e}`,
   (id, s, e) => `https://vidzen.fun/tv/${id}/${s}/${e}`,
+  (id, s, e) => `https://vidstuck.cc/embed/tv/${id}/${s}/${e}`,
 ];
 
 const SANDBOXED = new Set([]);
@@ -33,7 +31,7 @@ function setPlayer() {
   if (SANDBOXED.has(idx)) frame.setAttribute("sandbox", SANDBOX);
   else frame.removeAttribute("sandbox");
   frame.src = SERVERS[idx](showId, selSeason, selEpisode);
-  document.getElementById("dlBtn").href = `https://vidsrc.sh/tv/${showId}/${selSeason}/${selEpisode}`;
+  document.getElementById("dlBtn").href = `https://02moviedownloader.top/api/download/tv/${showId}/${selSeason}/${selEpisode}`;
 }
 function changeServer() { setPlayer(); }
 
