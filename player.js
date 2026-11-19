@@ -6,8 +6,8 @@ if (!movieId || BLOCKED_MOVIES.has(parseInt(movieId))) location.replace("movies.
 document.getElementById("dlBtn").href = `https://02moviedownloader.top/api/download/movie/${movieId}`;
 
 const SERVERS = [
-  id => `https://vidsrc.su/movie/${id}`,
   id => `https://vidsrc.sh/embed/movie/${id}`,
+  id => `https://vidsrc.su/movie/${id}`,
   id => `https://vidspark.to/movie/${id}`,
   id => `https://vsembed.su/embed/movie/${id}`,
   id => `https://www.2embed.cc/embed/${id}`,
